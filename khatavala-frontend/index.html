@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khatavala</title>
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <script>
+      /**
+       * Applies the saved theme BEFORE the first paint.
+       *
+       * This has to be an inline, blocking script in <head>. If the class were
+       * set from React instead, the browser would paint the default light
+       * palette first and a dark-mode user would get a white flash on every
+       * page load — worst at night, which is exactly when they chose dark.
+       *
+       * Reads the same key zustand's persist middleware writes
+       * (see src/store/themeStore.ts), so the two never disagree.
+       */
+      (function () {
+        try {
+          var stored = localStorage.getItem('khatavala-theme');
+          var choice = stored ? JSON.parse(stored).state.theme : 'system';
+          var dark =
+            choice === 'dark' ||
+            (choice === 'system' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        } catch (e) {
+          /* Corrupt or unavailable storage: fall through to the light default. */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

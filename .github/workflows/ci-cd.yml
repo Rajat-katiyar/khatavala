@@ -1,0 +1,32 @@
+name: Khatavala CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Install & Compile Backend
+        run: |
+          cd khatavala-backend
+          npm ci
+          npx tsc --noEmit
+
+      - name: Install & Build Frontend
+        run: |
+          cd khatavala-frontend
+          npm ci
+          npm run build
