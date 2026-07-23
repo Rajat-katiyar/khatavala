@@ -22,11 +22,11 @@ jobs:
       - name: Install & Compile Backend
         run: |
           cd khatavala-backend
-          npm ci
+          npm install
           npx tsc --noEmit
 
       - name: Install & Build Frontend
         run: |
           cd khatavala-frontend
-          npm ci
+          npm install
           npm run build
